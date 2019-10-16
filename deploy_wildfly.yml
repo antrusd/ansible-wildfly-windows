@@ -1,0 +1,99 @@
+---
+- name: Deploy Wildfly on Windows
+  hosts: '{{ target_hosts }}'
+
+  tasks:
+    - name: install jdk package
+      win_chocolatey:
+        name: '{{ jdk_package }}'
+        state: present
+        version: '{{ java_major_version }}.{{ java_minor_version }}'
+
+    - name: set JAVA_HOME as facts
+      set_fact:
+        java_home: '{{ ansible_env.ProgramFiles }}\Java\jdk1.{{ java_major_version }}_{{ java_minor_version }}'
+
+    - name: set JAVA_HOME environment
+      win_environment:
+        state: present
+        name: JAVA_HOME
+        value: '{{ java_home }}'
+        level: machine
+
+    - name: add java executable to default path
+      win_path:
+        elements:
+          - '{{ ansible_env.ProgramFiles }}\Java\jdk1.{{ java_major_version }}_{{ java_minor_version }}\bin'
+
+    - name: download wildfly zip package
+      win_get_url:
+        url: 'https://download.jboss.org/wildfly/{{ wildfly_version }}/wildfly-{{ wildfly_version }}.zip'
+        dest: '{{ ansible_env.TEMP }}\wildfly-{{ wildfly_version }}.zip'
+
+    - name: extract wildfly zip package
+      win_unzip:
+        src: '{{ ansible_env.TEMP }}\wildfly-{{ wildfly_version }}.zip'
+        dest: '{{ ansible_env.SystemDrive }}\WildFly'
+        creates: '{{ ansible_env.SystemDrive }}\WildFly'
+
+    - name: set JBOSS_HOME as facts
+      set_fact:
+        jboss_home: '{{ ansible_env.SystemDrive }}\WildFly\wildfly-{{ wildfly_version }}'
+
+    - name: set JBOSS_HOME environment
+      win_environment:
+        state: present
+        name: JBOSS_HOME
+        value: '{{ jboss_home }}'
+        level: machine
+
+    - name: create wildfly user admin
+      win_shell: |
+        {{ jboss_home }}\bin\add-user.bat -s {{ wildfly_admin }} {{ wildfly_password | quote }}
+      environment:
+        JAVA_HOME: '{{ java_home }}'
+        JBOSS_HOME: '{{ jboss_home }}'
+
+    - name: set wildfly bind address to public interface
+      win_lineinfile:
+        path: '{{ jboss_home }}\bin\{{ wildfly_mode }}.conf.bat'
+        regexp: '^set\s.*jboss\.bind\.address='
+        insertbefore: '^:JAVA_OPTS_SET'
+        line: 'set "JAVA_OPTS=%JAVA_OPTS% -Djboss.bind.address={{ ansible_host }}"'
+
+    - name: set wildfly management bind address to public interface
+      win_lineinfile:
+        path: '{{ jboss_home }}\bin\{{ wildfly_mode }}.conf.bat'
+        regexp: '^set\s.*jboss\.bind\.address\.management='
+        insertbefore: '^:JAVA_OPTS_SET'
+        line: 'set "JAVA_OPTS=%JAVA_OPTS% -Djboss.bind.address.management={{ ansible_host }}"'
+
+    - name: copy service directory to bin
+      win_robocopy:
+        src: '{{ jboss_home }}\docs\contrib\scripts\service'
+        dest: '{{ jboss_home }}\bin\service'
+        recurse: yes
+        purge: yes
+
+    - name: install wildfly service
+      win_shell: |
+        {{ jboss_home }}\bin\service\service.bat install /config {{ wildfly_config }} /name {{ wildfly_service_name }} /display {{ wildfly_service_display_name | quote }}
+      environment:
+        JAVA_HOME: '{{ java_home }}'
+        JBOSS_HOME: '{{ jboss_home }}'
+
+    - name: set wildfly service startup mode to auto and ensure it is started
+      win_service:
+        name: '{{ wildfly_service_name }}'
+        start_mode: auto
+        state: started
+
+    - name: set firewall rule to allow default wildfly port (8080, 8443, 9990)
+      win_firewall_rule:
+        name: WildFly
+        localport: 8080,8443,9990
+        action: allow
+        direction: in
+        protocol: tcp
+        state: present
+        enabled: yes
