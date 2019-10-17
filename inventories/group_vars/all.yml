@@ -2,3 +2,16 @@
 ansible_connection: winrm
 ansible_winrm_transport: credssp
 ansible_winrm_server_cert_validation: ignore
+
+jdk_package: jdk8
+java_major_version: 8.0
+java_minor_version: 221
+
+wildfly_version: 18.0.0.Final
+wildfly_mode: standalone
+wildfly_config: '{{ wildfly_mode }}.xml'
+
+wildfly_admin: superuser
+wildfly_password: 'mvTj8G7gaaw_Ewz1'
+wildfly_service_name: 'wildfly'
+wildfly_service_display_name: 'WildFly {{ wildfly_version }}'
