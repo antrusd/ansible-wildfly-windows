@@ -1,20 +1,23 @@
 pipeline {
-    agent { label 'master' }
+    agent { label 'linux' }
 
     stages {
-        stage('Prepare') {
+        stage('Workspace Prepare') {
             steps {
-                bat 'echo "Stage 1, Preparing"'
+                sh 'echo "Stage 1, Preparing Workspace"'
                 cleanWs()
-
-                withPythonEnv("C:\\Python\\Python37\\python"){
-                    bat 'pip install -r requirements.txt'
-                }
+                sh 'which ansible-playbook'
+                sh 'pip install -r requirements.txt'
             }
         }
+
         stage('Install WildFly') {
             steps {
-                bat 'echo "Stage 2, Building"'
+                ansiblePlaybook colorized: true,
+                                installation: 'ansible',
+                                credentialsId: 'w2k16-target',
+                                playbook: 'deploy_wildfly.yml',
+                                extraVars: 'target_hosts=wildfly-win2k16'
             }
         }
     }
