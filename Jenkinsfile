@@ -7,7 +7,6 @@ pipeline {
         stage('Workspace Prepare') {
             steps {
                 sh 'echo "Stage 1, Preparing Workspace"'
-                cleanWs()
                 sh 'which ansible-playbook'
                 sh 'pip install -r requirements.txt'
             }
