@@ -1,4 +1,2 @@
-172.2.0.20     ansible_host=172.2.0.20
-
-[wildfly-win2k16]
+[w2k16-target]
 172.2.0.20

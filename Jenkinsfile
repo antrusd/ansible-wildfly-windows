@@ -11,13 +11,36 @@ pipeline {
             }
         }
 
+        stage('Check Connection Target') {
+            steps {
+                sh 'echo "Stage 2, Test Target Connectivity"'
+                ansiblePlaybook colorized: true,
+                                installation: 'ansible',
+                                credentialsId: 'w2k16-target',
+                                playbook: 'winrm_ping.yml',
+                                extras: '-e target_hosts=w2k16-target'
+            }
+        }
+
         stage('Install WildFly') {
             steps {
+                sh 'echo "Stage 3, Deploying WildFly"'
                 ansiblePlaybook colorized: true,
                                 installation: 'ansible',
                                 credentialsId: 'w2k16-target',
                                 playbook: 'deploy_wildfly.yml',
-                                extraVars: 'target_hosts=wildfly-win2k16'
+                                extras: '-e target_hosts=w2k16-target'
+            }
+        }
+
+        stage('Check Installation Result') {
+            steps {
+                sh 'echo "Stage 2, Test WildFly Installation"'
+                ansiblePlaybook colorized: true,
+                                installation: 'ansible',
+                                credentialsId: 'w2k16-target',
+                                playbook: 'winrm_url.yml',
+                                extras: '-e target_hosts=w2k16-target'
             }
         }
     }

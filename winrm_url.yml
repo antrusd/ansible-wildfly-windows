@@ -1,0 +1,9 @@
+---
+- name: WildFly Management Check
+  hosts: '{{ target_hosts }}'
+
+  tasks:
+    - name: check if wildfly deployed well
+      uri:
+        url: http://{{ ansible_host }}:8080
+        status_code: 200

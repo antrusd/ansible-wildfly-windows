@@ -1,0 +1,7 @@
+---
+- name: Windows Remote Management Check
+  hosts: '{{ target_hosts }}'
+
+  tasks:
+    - name: winrm ping
+      win_ping:
