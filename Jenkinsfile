@@ -7,8 +7,9 @@ pipeline {
         stage('Workspace Prepare') {
             steps {
                 sh 'echo "Stage 1, Preparing Workspace"'
-                sh 'which ansible-playbook'
-                sh 'pip install -r requirements.txt'
+                withPythonEnv("$HOME/ansible-2.7.12") {
+                    sh 'pip install -r requirements.txt'
+                }
             }
         }
 
