@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'linux' }
+    agent { label 'ansible' }
 
     stages {
         stage('Workspace Prepare') {
