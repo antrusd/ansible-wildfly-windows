@@ -7,3 +7,4 @@
       uri:
         url: http://{{ ansible_host }}:8080
         status_code: 200
+      delegate_to: localhost
