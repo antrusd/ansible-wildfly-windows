@@ -6,6 +6,6 @@
     - name: check if wildfly deployed well
       local_action:
         module: uri
-        url: http://{{ hostvars[inventory_hostname]['ansible_host'] }}:8080/
+        url: http://{{ hostvars[inventory_hostname].ansible_host }}:8080/
         method: GET
         status_code: 200
