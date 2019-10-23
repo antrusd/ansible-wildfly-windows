@@ -4,7 +4,8 @@
 
   tasks:
     - name: check if wildfly deployed well
-      uri:
-        url: http://{{ ansible_host }}:8080
+      local_action:
+        module: uri
+        url: http://{{ ansible_host }}:8080/
+        method: GET
         status_code: 200
-      delegate_to: localhost
