@@ -12,13 +12,17 @@ pipeline {
         stage('Clean Workspace') {
             steps {
                 sh 'git clean -xdff'
-                sh 'env'
             }
         }
 
-        stage('Installing Ansible') {
+        stage('Preparing Virtual Environment') {
             steps {
                 sh 'virtualenv --system-site-packages -p python3 ${WORKSPACE}/ansible-tf-azure'
+            }
+        }
+
+        stage('Install Ansible') {
+            steps {
                 withPythonEnv('${WORKSPACE}/ansible-tf-azure/') {
                     sh 'pip install --upgrade pip'
                     sh 'pip install -r requirements.txt'
