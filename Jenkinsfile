@@ -1,6 +1,6 @@
-def TF_OPERATION = 'Create'
-def TF_WORKSPACE = 'default'
-def TF_VERSION   = '0.12.12'
+TF_OPERATION = 'Create'
+TF_WORKSPACE = 'default'
+TF_VERSION   = '0.12.12'
 
 
 pipeline {
