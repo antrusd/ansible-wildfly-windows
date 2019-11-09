@@ -18,7 +18,7 @@ pipeline {
         stage('Installing Ansible') {
             steps {
                 sh 'virtualenv --system-site-packages -p python3 $PWD/ansible-tf-azure'
-                withPythonEnv("$PWD/ansible-tf-azure/") {
+                withPythonEnv("${WORKSPACE}/ansible-tf-azure/") {
                     sh 'pip install --upgrade pip'
                     sh 'pip install -r requirements.txt'
                 }
@@ -105,7 +105,7 @@ pipeline {
                 }
             }
             steps {
-                withPythonEnv("$PWD/ansible-tf-azure/") {
+                withPythonEnv("${WORKSPACE}/ansible-tf-azure/") {
                     ansiblePlaybook colorized: true,
                                     installation: 'ansible',
                                     credentialsId: 'w2k16-target',
@@ -122,7 +122,7 @@ pipeline {
                 }
             }
             steps {
-                withPythonEnv("$PWD/ansible-tf-azure/") {
+                withPythonEnv("${WORKSPACE}/ansible-tf-azure/") {
                     ansiblePlaybook colorized: true,
                                     installation: 'ansible',
                                     credentialsId: 'w2k16-target',
@@ -139,7 +139,7 @@ pipeline {
                 }
             }
             steps {
-                withPythonEnv("$PWD/ansible-tf-azure/") {
+                withPythonEnv("${WORKSPACE}/ansible-tf-azure/") {
                     ansiblePlaybook colorized: true,
                                     installation: 'ansible',
                                     credentialsId: 'w2k16-target',
