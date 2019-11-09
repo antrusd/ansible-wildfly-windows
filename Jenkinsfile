@@ -1,8 +1,3 @@
-TF_OPERATION = 'Create'
-TF_WORKSPACE = 'default'
-TF_VERSION   = '0.12.12'
-
-
 pipeline {
     agent {
         label "ansible && linux"
@@ -15,14 +10,10 @@ pipeline {
             }
         }
 
-        stage('Preparing Virtual Environment') {
-            steps {
-                sh 'virtualenv --system-site-packages -p python3 ${WORKSPACE}/ansible-tf-azure'
-            }
-        }
-
         stage('Install Ansible') {
             steps {
+                sh 'virtualenv --system-site-packages -p python3 ${WORKSPACE}/ansible-tf-azure'
+
                 withPythonEnv("${WORKSPACE}/ansible-tf-azure/") {
                     sh 'pip install --upgrade pip'
                     sh 'pip install -r requirements.txt'
@@ -32,7 +23,7 @@ pipeline {
 
         stage('Installing Terraform') {
             steps {
-                sh 'curl -o ${WORKSPACE}/terraform.zip https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip'
+                sh 'curl -o ${WORKSPACE}/terraform.zip https://releases.hashicorp.com/terraform/0.12.12/terraform_0.12.12_linux_amd64.zip'
                 sh 'unzip -o -d ${WORKSPACE}/ansible-tf-azure/bin/ ${WORKSPACE}/terraform.zip'
                 sh 'rm -f ${WORKSPACE}/terraform.zip'
                 withCredentials([string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'), string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'), string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'), string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID')]) {
