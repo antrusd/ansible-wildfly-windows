@@ -1,5 +1,5 @@
-def TF_OPERATION
-def TF_WORKSPACE
+def TF_OPERATION = 'Create'
+def TF_WORKSPACE = 'default'
 
 pipeline {
     agent {
@@ -39,6 +39,7 @@ pipeline {
             steps {
                 script {
                     TF_OPERATION = input (
+                        ok: 'Next',
                         message: 'Please Select Terraform Operation ',
                         parameters: [
                             choice (
@@ -48,6 +49,7 @@ pipeline {
                         ]
                     )
                 }
+                echo "Terraform Operation: ${TF_OPERATION}"
             }
         }
 
@@ -65,6 +67,7 @@ pipeline {
                         ]
                     )
                 }
+                echo "Terraform Workspace: ${TF_WORKSPACE}"
             }
         }
 
@@ -76,8 +79,8 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'), string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'), string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'), string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID')]) {
-                    sh '${WORKSPACE}/ansible-tf-azure/bin/terraform workspace select ${TF_WORKSPACE}'
-                    sh '${WORKSPACE}/ansible-tf-azure/bin/terraform destroy -input=false t_plan'
+                    sh "${WORKSPACE}/ansible-tf-azure/bin/terraform workspace select ${TF_WORKSPACE}"
+                    sh "${WORKSPACE}/ansible-tf-azure/bin/terraform destroy -input=false t_plan"
                 }
             }
         }
@@ -90,9 +93,9 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'), string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'), string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'), string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID')]) {
-                    sh '${WORKSPACE}/ansible-tf-azure/bin/terraform workspace new ${TF_WORKSPACE}'
-                    sh '${WORKSPACE}/ansible-tf-azure/bin/terraform plan -input=false -out t_plan'
-                    sh '${WORKSPACE}/ansible-tf-azure/bin/terraform apply -input=false t_plan'
+                    sh "${WORKSPACE}/ansible-tf-azure/bin/terraform workspace new ${TF_WORKSPACE}"
+                    sh "${WORKSPACE}/ansible-tf-azure/bin/terraform plan -input=false -out t_plan"
+                    sh "${WORKSPACE}/ansible-tf-azure/bin/terraform apply -input=false t_plan"
                 }
             }
         }
