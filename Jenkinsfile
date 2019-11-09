@@ -1,3 +1,6 @@
+def TF_OPERATION
+def TF_WORKSPACE
+
 pipeline {
     agent {
         label "ansible && linux"
@@ -36,7 +39,7 @@ pipeline {
             steps {
                 script {
                     TF_OPERATION = input (
-                        message: 'Please Select Terraform Operation     ',
+                        message: 'Please Select Terraform Operation ',
                         parameters: [
                             choice (
                                 name: 'TF_OPERATION',
@@ -52,7 +55,7 @@ pipeline {
             steps {
                 script {
                     TF_WORKSPACE = input (
-                        message: 'Please Input Terraform Workspace     ',
+                        message: 'Please Input Terraform Workspace ',
                         parameters: [
                             string (
                                 name: 'TF_WORKSPACE',
