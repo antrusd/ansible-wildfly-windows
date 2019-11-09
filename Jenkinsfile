@@ -19,7 +19,7 @@ pipeline {
         stage('Installing Ansible') {
             steps {
                 sh 'virtualenv --system-site-packages -p python3 ${WORKSPACE}/ansible-tf-azure'
-                withPythonEnv("${WORKSPACE}/ansible-tf-azure/") {
+                withPythonEnv('${WORKSPACE}/ansible-tf-azure/') {
                     sh 'pip install --upgrade pip'
                     sh 'pip install -r requirements.txt'
                 }
