@@ -12,6 +12,7 @@ pipeline {
         stage('Clean Workspace') {
             steps {
                 sh 'git clean -xdff'
+                sh 'env'
             }
         }
 
