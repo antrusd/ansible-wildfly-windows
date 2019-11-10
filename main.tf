@@ -4,9 +4,9 @@ provider "azurerm" {
 
 terraform {
   backend "azurerm" {
-    resource_group_name  = "SHW-BBCT-CICD-RG"
-    storage_account_name = "tsateblob"
-    container_name       = "tfstate"
+    resource_group_name  = "SHW-INT-VIGCICD-RG"
+    storage_account_name = "tsateblobviginter"
+    container_name       = "devtfstate"
     key                  = "terraform.tfstate"
   }
 }
