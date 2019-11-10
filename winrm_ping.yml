@@ -3,9 +3,9 @@
   hosts: '{{ target_hosts }}'
 
   tasks:
-  - name: wait for system to become reachable
-    wait_for_connection:
-      timeout: 1200
+    - name: wait for system to become reachable
+      wait_for_connection:
+        timeout: 1200
 
     - name: winrm ping
       win_ping:
