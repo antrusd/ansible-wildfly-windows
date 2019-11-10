@@ -131,7 +131,7 @@ resource "azurerm_virtual_machine_extension" "CustomScriptExtension" {
 }
 
 resource "local_file" "hosts" {
-  content         = "[${var.VMRG}]\n${join("\n", formatlist("%s ansible_host=%s", "${azurerm_virtual_machine.Windows_VM.*.name}", "${azurerm_network_interface.nic.*.private_ip_address}"))}"
+  content         = "[${var.VMRG}]\n${join("\n", formatlist("%s ansible_host=%s\n", "${azurerm_virtual_machine.Windows_VM.*.name}", "${azurerm_network_interface.nic.*.private_ip_address}"))}"
   filename        = "inventories/hosts"
   file_permission = "0644"
 }
