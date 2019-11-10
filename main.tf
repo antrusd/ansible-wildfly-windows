@@ -4,7 +4,7 @@ provider "azurerm" {
 
 terraform {
   backend "azurerm" {
-    resource_group_name  = "SHAW-AUTH-CICD-RG"
+    resource_group_name  = "${var.VMRG}"
     storage_account_name = "tsateblob"
     container_name       = "tfstate"
     key                  = "terraform.tfstate"
