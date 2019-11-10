@@ -134,7 +134,7 @@ pipeline {
                 withPythonEnv("${WORKSPACE}/ansible-tf-azure/") {
                     ansiblePlaybook colorized: true,
                                     installation: 'ansible',
-                                    credentialsId: 'w2k16-target',
+                                    credentialsId: 'vignoadmin',
                                     playbook: 'winrm_ping.yml',
                                     extras: '-e target_hosts=all'
                 }
@@ -151,7 +151,7 @@ pipeline {
                 withPythonEnv("${WORKSPACE}/ansible-tf-azure/") {
                     ansiblePlaybook colorized: true,
                                     installation: 'ansible',
-                                    credentialsId: 'w2k16-target',
+                                    credentialsId: 'vignoadmin',
                                     playbook: 'deploy_wildfly.yml',
                                     extras: '-e target_hosts=all'
                 }
@@ -168,7 +168,7 @@ pipeline {
                 withPythonEnv("${WORKSPACE}/ansible-tf-azure/") {
                     ansiblePlaybook colorized: true,
                                     installation: 'ansible',
-                                    credentialsId: 'w2k16-target',
+                                    credentialsId: 'vignoadmin',
                                     playbook: 'winrm_url.yml',
                                     extras: '-e target_hosts=all'
                 }
