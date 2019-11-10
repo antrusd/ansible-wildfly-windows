@@ -13,7 +13,6 @@ variable "vm_name" {
   type = "string"
   default = "WIN-VM-CUS"
 }
-
 variable "vm_size" {
   description = "Enter the Size of VMs"
   default = "Standard_D4_v3"
@@ -21,23 +20,24 @@ variable "vm_size" {
 
 variable "admin_username" {
   description = "Admin user name for VM"
-  default = "vignoadmin"
+  default = "vignoadmin "
 }
 
 variable "count_of_VMs" {
   description = "Number of VMs you want to create as part of this deployment"
-  #type = "string"
-  default = 2
+  default = 1
 }
 
 variable "VnetRG" {
   description = "Name of Virtual network resource group"
   default = "SHAWAUTH-VIGNO-CICD-T-RG"
 }
+
 variable "VnetName" {
   description = "Name of Virtual Network"
   default = "SHAW-AUTH-VIGNO-CICD-T-vnet"
 }
+
 variable "SubnetName" {
   description = "Name of Subnet"
   default = "shaw-auth-vigno-cicd-t-sn"

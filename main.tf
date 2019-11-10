@@ -32,13 +32,11 @@ data "azurerm_key_vault_secret" "serveradminpwd" {
   key_vault_id = "${data.azurerm_key_vault.keyvault.id}"
 }
 
-#Create Resource Group
 resource "azurerm_resource_group" "deployrg" {
   name     = "${var.VMRG}"
   location = "${var.region}"
 }
 
-#Create NIC
 resource "azurerm_network_interface" "nic" {
   count               = "${var.count_of_VMs}"
   name                = "${var.vm_name}.${count.index}-nic"
@@ -52,7 +50,6 @@ resource "azurerm_network_interface" "nic" {
   }
 }
 
-#Create Managed Disks
 resource "azurerm_managed_disk" "mdisk" {
   count                = "${var.count_of_VMs}"
   name                 = "${var.vm_name}-${count.index}-datadisk"
@@ -63,7 +60,6 @@ resource "azurerm_managed_disk" "mdisk" {
   disk_size_gb         = "1023"
 }
 
-#Create Windows Virtual Machine
 resource "azurerm_virtual_machine" "Windows_VM" {
   count                 = "${var.OS_Image_Publisher == "MicrosoftWindowsServer" ? var.count_of_VMs : 0 }"
   name                  = "${var.vm_name}-${count.index}"
@@ -110,7 +106,6 @@ resource "azurerm_virtual_machine" "Windows_VM" {
   }
 }
 
-#Custom Extension Script for Windows
 resource "azurerm_virtual_machine_extension" "CustomScriptExtension" {
   name                 = "${var.vm_name}-${count.index}-CustomExtension"
   location             = "${azurerm_resource_group.deployrg.location}"
