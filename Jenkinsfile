@@ -99,7 +99,7 @@ pipeline {
                         parameters: [
                             string (
                                 name: 'TF_VM_COUNT',
-                                defaultValue: 'default',
+                                defaultValue: '1',
                                 trim: true
                             )
                         ]
@@ -117,7 +117,7 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'), string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'), string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'), string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID')]) {
-                    sh "${WORKSPACE}/ansible-tf-azure/bin/terraform workspace new ${TF_WORKSPACE}"
+                    sh "${WORKSPACE}/ansible-tf-azure/bin/terraform workspace new ${TF_WORKSPACE} || ${WORKSPACE}/ansible-tf-azure/bin/terraform workspace select ${TF_WORKSPACE}"
                     sh "${WORKSPACE}/ansible-tf-azure/bin/terraform plan -input=false -no-color -out t_plan -var count_of_VMs=${TF_VM_COUNT}"
                     sh "${WORKSPACE}/ansible-tf-azure/bin/terraform apply -input=false -no-color t_plan"
                 }
