@@ -81,8 +81,8 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'ARM_CLIENT_ID', variable: 'ARM_CLIENT_ID'), string(credentialsId: 'ARM_CLIENT_SECRET', variable: 'ARM_CLIENT_SECRET'), string(credentialsId: 'ARM_SUBSCRIPTION_ID', variable: 'ARM_SUBSCRIPTION_ID'), string(credentialsId: 'ARM_TENANT_ID', variable: 'ARM_TENANT_ID')]) {
                     sh "${WORKSPACE}/ansible-tf-azure/bin/terraform workspace select ${TF_WORKSPACE}"
-                    sh "${WORKSPACE}/ansible-tf-azure/bin/terraform plan -input=false -no-color -out t_plan"
-                    sh "${WORKSPACE}/ansible-tf-azure/bin/terraform destroy -input=false -no-color t_plan"
+                    sh "${WORKSPACE}/ansible-tf-azure/bin/terraform plan -input=false -no-color"
+                    sh "${WORKSPACE}/ansible-tf-azure/bin/terraform destroy -input=false -no-color -auto-approve"
                 }
             }
         }
