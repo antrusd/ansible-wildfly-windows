@@ -20,7 +20,7 @@ variable "vm_size" {
 
 variable "admin_username" {
   description = "Admin user name for VM"
-  default = "vignoadmin"
+  default = "vignoadmin "
 }
 
 variable "count_of_VMs" {
