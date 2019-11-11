@@ -5,13 +5,13 @@ variable "region" {
 
 variable "VMRG" {
   description = "Resource group to deploy VM"
-  default = "SHW-BBCT-CICD-RG"
+  default = "SHW-JBS-CICD-RG"
 }
 
 variable "vm_name" {
   description = "Enter desired name of VM"
   type = "string"
-  default = "WIN-VM-CUS"
+  default = "WIN-TEST-CUS"
 }
 variable "vm_size" {
   description = "Enter the Size of VMs"
