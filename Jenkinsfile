@@ -25,7 +25,7 @@ pipeline {
             }
         }
 
-        stage('Installing Terraform') {
+        stage('Install Terraform') {
             steps {
                 sh "curl -o ${WORKSPACE}/terraform.zip https://releases.hashicorp.com/terraform/0.12.12/terraform_0.12.12_linux_amd64.zip"
                 sh "unzip -o -d ${WORKSPACE}/ansible-tf-azure/bin/ ${WORKSPACE}/terraform.zip"
