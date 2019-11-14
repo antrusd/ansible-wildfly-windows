@@ -159,6 +159,23 @@ pipeline {
             }
         }
 
+        stage('Install SQL Server Driver for WildFly') {
+            when {
+                expression {
+                    TF_OPERATION == 'Create'
+                }
+            }
+            steps {
+                withPythonEnv("${WORKSPACE}/ansible-tf-azure/") {
+                    ansiblePlaybook colorized: true,
+                                    installation: 'ansible',
+                                    credentialsId: 'vignoadmin',
+                                    playbook: 'install_mssql_driver.yml',
+                                    extras: '-e target_hosts=all'
+                }
+            }
+        }
+
         stage('Check Installation Result') {
             when {
                 expression {

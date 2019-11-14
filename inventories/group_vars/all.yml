@@ -15,3 +15,5 @@ wildfly_admin: superuser
 wildfly_password: 'mvTj8G7gaaw_Ewz1'
 wildfly_service_name: 'wildfly'
 wildfly_service_display_name: 'WildFly {{ wildfly_version }}'
+
+mssql_jdbc_jar: mssql-jdbc-7.4.1.jre8.jar

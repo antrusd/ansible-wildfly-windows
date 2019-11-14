@@ -1,0 +1,32 @@
+---
+- name: Install SQL Server Driver for Wildfly on Windows
+  hosts: '{{ target_hosts }}'
+
+  tasks:
+    - name: create mssql module directory
+      win_file:
+        path: '{{ jboss_home }}\modules\system\layers\base\com\microsoft\sqlserver\main'
+        state: directory
+
+    - name: copy mssql jdbc jar module
+      win_copy:
+        path: '{{ mssql_jdbc_jar }}'
+        dest: '{{ jboss_home }}\modules\system\layers\base\com\microsoft\sqlserver\main\{{ mssql_jdbc_jar }}'
+
+    - name: copy mssql jdbc jar module.xml
+      win_copy:
+        path: '{{ mssql_jdbc_jar }}.module.xml'
+        dest: '{{ jboss_home }}\modules\system\layers\base\com\microsoft\sqlserver\main\module.xml'
+
+    - name: install mssql datasource
+      win_shell: |
+        {{ jboss_home }}\bin\jboss-cli.bat -c --command='/subsystem=datasources/jdbc-driver=mssql:add(driver-name="mssql",driver-module-name="com.microsoft.sqlserver",driver-class-name="com.microsoft.sqlserver.jdbc.SQLServerDriver",driver-xa-datasource-class-name="com.microsoft.sqlserver.jdbc.SQLServerXADataSource")'
+      environment:
+        JAVA_HOME: '{{ java_home }}'
+        JBOSS_HOME: '{{ jboss_home }}'
+
+    - name: restart wildfly service
+      win_service:
+        name: '{{ wildfly_service_name }}'
+        start_mode: auto
+        state: restarted
