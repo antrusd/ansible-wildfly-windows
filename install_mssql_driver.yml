@@ -3,6 +3,14 @@
   hosts: '{{ target_hosts }}'
 
   tasks:
+    - name: set JAVA_HOME as facts
+      set_fact:
+        java_home: '{{ ansible_env.ProgramFiles }}\Java\jdk1.{{ java_major_version }}_{{ java_minor_version }}'
+
+    - name: set JBOSS_HOME as facts
+      set_fact:
+        jboss_home: '{{ ansible_env.SystemDrive }}\WildFly\wildfly-{{ wildfly_version }}'
+
     - name: create mssql module directory
       win_file:
         path: '{{ jboss_home }}\modules\system\layers\base\com\microsoft\sqlserver\main'
