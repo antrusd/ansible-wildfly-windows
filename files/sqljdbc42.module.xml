@@ -1,9 +1,10 @@
-<module name="com.microsoft.sqlserver" xmlns="urn:jboss:module:1.5">
+<module name="com.microsoft.sqlserver" xmlns="urn:jboss:module:1.3">
     <resources>
-        <resource-root path="mssql-jdbc-7.4.1.jre11.jar" />
+        <resource-root path="sqljdbc42.jar" />
     </resources>
     <dependencies>
         <module name="javax.api"/>
         <module name="javax.transaction.api"/>
+        <module name="javax.xml.bind.api"/>
     </dependencies>
 </module>
