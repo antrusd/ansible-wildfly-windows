@@ -18,12 +18,12 @@
 
     - name: copy mssql jdbc jar module
       win_copy:
-        path: '{{ mssql_jdbc_jar }}'
+        src: '{{ mssql_jdbc_jar }}'
         dest: '{{ jboss_home }}\modules\system\layers\base\com\microsoft\sqlserver\main\{{ mssql_jdbc_jar }}'
 
     - name: copy mssql jdbc jar module.xml
       win_copy:
-        path: '{{ mssql_jdbc_jar }}.module.xml'
+        src: '{{ mssql_jdbc_jar }}.module.xml'
         dest: '{{ jboss_home }}\modules\system\layers\base\com\microsoft\sqlserver\main\module.xml'
 
     - name: install mssql datasource
