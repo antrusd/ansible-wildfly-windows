@@ -18,7 +18,7 @@
 
     - name: copy mssql jdbc jar module
       win_copy:
-        src: '{{ mssql_jdbc_jar }}'
+        src: '{{ mssql_jdbc_jar }}.jar'
         dest: '{{ jboss_home }}\modules\system\layers\base\com\microsoft\sqlserver\main\{{ mssql_jdbc_jar }}.jar'
 
     - name: copy mssql jdbc jar module.xml

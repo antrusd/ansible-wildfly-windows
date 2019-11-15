@@ -8,7 +8,8 @@ pipeline {
     }
 
     environment {
-        ANSIBLE_NOCOLOR = 'True'
+        ANSIBLE_FORCE_COLOR = 'True'
+        PYTHONUNBUFFERED = 1
     }
 
     stages {
