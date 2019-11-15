@@ -77,7 +77,7 @@
 
     - name: install wildfly service
       win_shell: |
-        {{ jboss_home }}\bin\service\service.bat install /config {{ wildfly_config }} /name {{ wildfly_service_name }} /display {{ wildfly_service_display_name | quote }}
+        {{ jboss_home }}\bin\service\service.bat install /config {{ wildfly_config }} /name {{ wildfly_service_name }} /display {{ wildfly_service_display_name | quote }} /jbossuser {{ wildfly_admin }} /jbosspass {{ wildfly_password | quote }} /controller {{ ansible_host }}
       environment:
         JAVA_HOME: '{{ java_home }}'
         JBOSS_HOME: '{{ jboss_home }}'
