@@ -32,9 +32,19 @@
       environment:
         JAVA_HOME: '{{ java_home }}'
         JBOSS_HOME: '{{ jboss_home }}'
+        NOPAUSE: 'true'
 
-    - name: restart wildfly service
+    - name: stop wildfly service
+      win_shell: |
+        {{ jboss_home }}\bin\jboss-cli.bat --connect --controller={{ ansible_host }}:9990 --command=shutdown
+      environment:
+        JAVA_HOME: '{{ java_home }}'
+        JBOSS_HOME: '{{ jboss_home }}'
+        NOPAUSE: 'true'
+
+    - name: set wildfly service startup mode to auto and ensure it is started
       win_service:
         name: '{{ wildfly_service_name }}'
         start_mode: auto
-        state: restarted
+        state: started
+

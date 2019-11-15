@@ -81,6 +81,7 @@
       environment:
         JAVA_HOME: '{{ java_home }}'
         JBOSS_HOME: '{{ jboss_home }}'
+        NOPAUSE: 'true'
 
     - name: set wildfly service startup mode to auto and ensure it is started
       win_service:
