@@ -164,7 +164,7 @@ pipeline {
             }
         }
 
-        stage('Install SQL Server Driver for WildFly') {
+        stage('Install MSSQL Driver') {
             when {
                 expression {
                     TF_OPERATION == 'Create'
@@ -195,6 +195,7 @@ pipeline {
                                     playbook: 'winrm_url.yml',
                                     extras: '-e target_hosts=all'
                 }
+                sh 'echo "Ansible Inventory List" && cat inventories/hosts'
             }
         }
     }

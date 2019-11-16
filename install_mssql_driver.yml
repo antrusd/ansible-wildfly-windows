@@ -26,17 +26,28 @@
         src: '{{ mssql_jdbc_jar }}.module.xml'
         dest: '{{ jboss_home }}\modules\system\layers\base\com\microsoft\sqlserver\main\module.xml'
 
-    - name: install mssql datasource
+    - name: check installed mssql jdbc driver
       win_shell: |
-        {{ jboss_home }}\bin\jboss-cli.bat --connect --controller={{ ansible_host }}:9990 --command='/subsystem=datasources/jdbc-driver=mssql:add(driver-name="mssql",driver-module-name="com.microsoft.sqlserver",driver-class-name="com.microsoft.sqlserver.jdbc.SQLServerDriver",driver-xa-datasource-class-name="com.microsoft.sqlserver.jdbc.SQLServerXADataSource")'
+        {{ jboss_home }}\bin\jboss-cli.bat --connect --controller={{ ansible_host }}:9990 --commands="ls subsystem=datasources/jdbc-driver=mssql"
       environment:
         JAVA_HOME: '{{ java_home }}'
         JBOSS_HOME: '{{ jboss_home }}'
         NOPAUSE: 'true'
+      ignore_errors: true
+      register: mssql_rc
+
+    - name: install mssql jdbc driver
+      win_shell: |
+        {{ jboss_home }}\bin\jboss-cli.bat --connect --controller={{ ansible_host }}:9990 --commands="/subsystem=datasources/jdbc-driver=mssql:add(driver-name=mssql,driver-module-name=com.microsoft.sqlserver,driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver,driver-xa-datasource-class-name=com.microsoft.sqlserver.jdbc.SQLServerXADataSource)"
+      environment:
+        JAVA_HOME: '{{ java_home }}'
+        JBOSS_HOME: '{{ jboss_home }}'
+        NOPAUSE: 'true'
+      when: mssql_rc.rc != 0
 
     - name: stop wildfly service
       win_shell: |
-        {{ jboss_home }}\bin\jboss-cli.bat --connect --controller={{ ansible_host }}:9990 --command=shutdown
+        {{ jboss_home }}\bin\jboss-cli.bat --connect --controller={{ ansible_host }}:9990 --commands=shutdown
       environment:
         JAVA_HOME: '{{ java_home }}'
         JBOSS_HOME: '{{ jboss_home }}'
@@ -47,4 +58,3 @@
         name: '{{ wildfly_service_name }}'
         start_mode: auto
         state: started
-
